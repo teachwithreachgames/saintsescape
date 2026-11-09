@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Vatican Archives Heist</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       LANGUAGE SELECTION SCREEN — first screen, before boot
+       ═══════════════════════════════════════════════════════════ -->
+  <div id="lang-screen" class="screen active">
+    <div class="lang-scanlines" aria-hidden="true"></div>
+    <div class="lang-content">
+      <div class="lang-crest" aria-hidden="true">✝</div>
+      <p class="lang-title">THE VATICAN ARCHIVES HEIST</p>
+      <p class="lang-subtitle">LE VOL DES ARCHIVES DU VATICAN</p>
+      <p class="lang-prompt">Select your language / Choisissez votre langue</p>
+      <div class="lang-buttons">
+        <button class="lang-btn lang-btn-en" id="btn-lang-en" aria-label="Play in English">
+          <span class="lang-btn-flag">🇬🇧</span>
+          <span class="lang-btn-label">ENGLISH</span>
+          <span class="lang-btn-sub">Play in English</span>
+        </button>
+        <button class="lang-btn lang-btn-fr" id="btn-lang-fr" aria-label="Jouer en français">
+          <span class="lang-btn-flag">🇫🇷</span>
+          <span class="lang-btn-label">FRANÇAIS</span>
+          <span class="lang-btn-sub">Jouer en français</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       BOOT SCREEN — shown on first load before game starts
+       ═══════════════════════════════════════════════════════════ -->
+  <div id="boot-screen" class="screen">
+    <div class="boot-scanlines"></div>
+    <div class="boot-content">
+      <div class="boot-crest">✝</div>
+      <p class="boot-label">ARCHIVUM SECRETUM VATICANUM</p>
+      <h1 class="boot-title">THE VATICAN<br>ARCHIVES HEIST</h1>
+      <p class="boot-sub">CLASSIFIED · LEVEL OMEGA · CLEARANCE REQUIRED</p>
+      <div class="boot-alert">
+        <span class="alert-icon">⚠</span>
+        <span>CRITICAL SYSTEM BREACH DETECTED — 6 SAINT FILES CORRUPTED</span>
+        <span class="alert-icon">⚠</span>
+      </div>
+      <p class="boot-briefing">
+        Agent, a cyberattack has compromised the Vatican Secret Archives. Six sacred saint
+        dossiers have been encrypted and the Ignatian Vault is sealed. You must restore each
+        file to unlock the Final Vault before the system purges all records permanently.
+      </p>
+      <div class="boot-meta">
+        <span>MISSION DURATION: <strong>75 MINUTES</strong></span>
+        <span>ROOMS: <strong>7</strong></span>
+        <span>CLEARANCE: <strong>OMEGA</strong></span>
+      </div>
+      <button id="btn-start" class="btn-primary">INITIATE MISSION</button>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       MAIN GAME SCREEN
+       ═══════════════════════════════════════════════════════════ -->
+  <div id="game-screen" class="screen">
+
+    <!-- TOP HUD BAR -->
+    <header class="hud">
+      <div class="hud-left">
+        <span class="hud-logo">✝ ARCHIVUM</span>
+      </div>
+      <div class="hud-center">
+        <!-- Progress tracker: 7 nodes, one per room -->
+        <div class="progress-track" id="progress-track">
+          <!-- Dynamically rendered by script.js -->
+        </div>
+      </div>
+      <div class="hud-right">
+        <div class="hud-timer" id="hud-timer">
+          <span class="timer-icon">⏱</span>
+          <span id="timer-display">75:00</span>
+        </div>
+        <button class="hud-lang-toggle" id="lang-toggle" aria-label="Switch to French" title="Switch language">FR</button>
+        <button class="hud-music-toggle" id="btn-music" aria-label="Toggle music" title="Toggle music">
+          <span class="music-icon" id="music-icon">🔇</span>
+          <span class="music-label" id="music-label">MUSIC</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- MAIN LAYOUT: sidebar + room panel -->
+    <div class="game-layout">
+
+      <!-- LEFT SIDEBAR — room file list -->
+      <aside class="sidebar">
+        <p class="sidebar-heading">// SAINT FILES</p>
+        <ul class="room-list" id="room-list">
+          <!-- Dynamically rendered by script.js -->
+        </ul>
+        <div class="sidebar-footer">
+          <div class="hint-block">
+            <p class="hint-count">HINTS REMAINING: <span id="hint-count">3</span></p>
+            <button id="btn-hint" class="btn-hint">REQUEST HINT</button>
+          </div>
+        </div>
+      </aside>
+
+      <!-- RIGHT PANEL — active room content -->
+      <main class="room-panel" id="room-panel">
+
+        <!-- ─── ROOM 1: SAINT PETER ─────────────────────────────── -->
+        <section class="room" id="room-0" data-room="0">
+          <div class="room-header">
+            <span class="room-tag">FILE_001</span>
+            <h2 class="room-title" id="room-title-0">Saint Peter</h2>
+            <span class="room-status-badge" id="badge-0">CORRUPTED</span>
+          </div>
+          <div class="room-body">
+            <div class="file-meta">
+              <span>APOSTLE · d. c. 64–68 AD · ROME</span>
+              <span class="file-integrity" id="integrity-0">INTEGRITY: 0%</span>
+            </div>
+            <div class="dossier-text" id="dossier-text-0">
+              <p>
+                Simeon bar Jonah, known as Peter, was the first Bishop of Rome and head of the
+                Twelve Apostles. His file contains the foundational keys to Vatican cryptographic
+                authority. Without restoring this record, no further archives can be accessed.
+              </p>
+            </div>
+
+            <!-- ═══════════════════════════════════════════════════
+                 PUZZLE ZONE — ROOM 1
+                 Replace the placeholder below with Room 1 puzzle markup.
+                 The puzzle logic belongs in script.js under:
+                   initRoom(0) → setupRoom0Puzzle()
+                 On correct answer, call: completeRoom(0)
+                 ═══════════════════════════════════════════════════ -->
+            <div class="puzzle-zone" id="puzzle-zone-0">
+              <div class="puzzle-placeholder">
+                <div class="placeholder-icon">🔐</div>
+                <p class="placeholder-label">[ PUZZLE MODULE — SAINT PETER ]</p>
+                <p class="placeholder-sub">Insert puzzle HTML here. Wire logic in script.js → setupRoom0Puzzle()</p>
+                <!-- TEMP: dev unlock button — remove in production -->
+                <button class="btn-dev-unlock" onclick="completeRoom(0)">DEV: UNLOCK ROOM</button>
+              </div>
+            </div>
+            <!-- END PUZZLE ZONE — ROOM 1 -->
+
+          </div>
+          <div class="room-feedback" id="feedback-0"></div>
+        </section>
+
+        <!-- ─── ROOM 2: SAINT BERNARD OF CLAIRVAUX ─────────────── -->
+        <section class="room locked" id="room-1" data-room="1">
+          <div class="room-header">
+            <span class="room-tag">FILE_002</span>
+            <h2 class="room-title" id="room-title-1">St. Bernard of Clairvaux</h2>
+            <span class="room-status-badge" id="badge-1">LOCKED</span>
+          </div>
+          <div class="room-body">
+            <div class="file-meta">
+              <span>ABBOT · 1090–1153 AD · BURGUNDY</span>
+              <span class="file-integrity" id="integrity-1">INTEGRITY: 0%</span>
+            </div>
+            <div class="dossier-text" id="dossier-text-1">
+              <p>
+                Bernard of Clairvaux, Doctor Mellifluus, was the primary mover of the Second
+                Crusade and a reformer of Cistercian monasticism. His archived writings contain
+                encryption keys derived from his mystical theology.
+              </p>
+            </div>
+
+            <!-- ═══════════════════════════════════════════════════
+                 PUZZLE ZONE — ROOM 2
+                 Replace the placeholder below with Room 2 puzzle markup.
+                 Wire logic in script.js → setupRoom1Puzzle()
+                 On correct answer, call: completeRoom(1)
+                 ═══════════════════════════════════════════════════ -->
+            <div class="puzzle-zone" id="puzzle-zone-1">
+              <div class="puzzle-placeholder">
+                <div class="placeholder-icon">🔐</div>
+                <p class="placeholder-label">[ PUZZLE MODULE — ST. BERNARD OF CLAIRVAUX ]</p>
+                <p class="placeholder-sub">Insert puzzle HTML here. Wire logic in script.js → setupRoom1Puzzle()</p>
+                <button class="btn-dev-unlock" onclick="completeRoom(1)">DEV: UNLOCK ROOM</button>
+              </div>
+            </div>
+            <!-- END PUZZLE ZONE — ROOM 2 -->
+
+          </div>
+          <div class="room-feedback" id="feedback-1"></div>
+          <!-- Lock overlay shown when room is locked -->
+          <div class="lock-overlay" id="lock-overlay-1">
+            <div class="lock-overlay-inner">
+              <span class="lock-icon">🔒</span>
+              <p>FILE ENCRYPTED</p>
+              <p class="lock-sub">Complete Saint Peter's file to decrypt</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- ─── ROOM 3: SAINT FRANCIS OF ASSISI ───────────────── -->
+        <section class="room locked" id="room-2" data-room="2">
+          <div class="room-header">
+            <span class="room-tag">FILE_003</span>
+            <h2 class="room-title" id="room-title-2">St. Francis of Assisi</h2>
+            <span class="room-status-badge" id="badge-2">LOCKED</span>
+          </div>
+          <div class="room-body">
+            <div class="file-meta">
+              <span>FRIAR · 1181–1226 AD · ASSISI</span>
+              <span class="file-integrity" id="integrity-2">INTEGRITY: 0%</span>
+            </div>
+            <div class="dossier-text" id="dossier-text-2">
+              <p>
+                Giovanni di Pietro di Bernardone, patron of animals and ecology, founded the
+                Order of Friars Minor. His archive holds sequences encoded within the Canticle
+                of the Sun — a cipher of creation and praise.
+              </p>
+            </div>
+
+            <!-- ═══════════════════════════════════════════════════
+                 PUZZLE ZONE — ROOM 3
+                 Wire logic in script.js → setupRoom2Puzzle()
+                 On correct answer, call: completeRoom(2)
+                 ═══════════════════════════════════════════════════ -->
+            <div class="puzzle-zone" id="puzzle-zone-2">
+              <div class="puzzle-placeholder">
+                <div class="placeholder-icon">🔐</div>
+                <p class="placeholder-label">[ PUZZLE MODULE — ST. FRANCIS OF ASSISI ]</p>
+                <p class="placeholder-sub">Insert puzzle HTML here. Wire logic in script.js → setupRoom2Puzzle()</p>
+                <button class="btn-dev-unlock" onclick="completeRoom(2)">DEV: UNLOCK ROOM</button>
+              </div>
+            </div>
+            <!-- END PUZZLE ZONE — ROOM 3 -->
+
+          </div>
+          <div class="room-feedback" id="feedback-2"></div>
+          <div class="lock-overlay" id="lock-overlay-2">
+            <div class="lock-overlay-inner">
+              <span class="lock-icon">🔒</span>
+              <p>FILE ENCRYPTED</p>
+              <p class="lock-sub">Complete St. Bernard's file to decrypt</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- ─── ROOM 4: SAINT ANTHONY OF PADUA ────────────────── -->
+        <section class="room locked" id="room-3" data-room="3">
+          <div class="room-header">
+            <span class="room-tag">FILE_004</span>
+            <h2 class="room-title" id="room-title-3">St. Anthony of Padua</h2>
+            <span class="room-status-badge" id="badge-3">LOCKED</span>
+          </div>
+          <div class="room-body">
+            <div class="file-meta">
+              <span>FRANCISCAN · 1195–1231 AD · LISBON</span>
+              <span class="file-integrity" id="integrity-3">INTEGRITY: 0%</span>
+            </div>
+            <div class="dossier-text" id="dossier-text-3">
+              <p>
+                Fernando Martins de Bulhões, Doctor Evangelicus, was renowned for his powerful
+                preaching and miracles. His dossier is indexed under "Lost & Found" —
+                fragments scattered across the archive, waiting to be reassembled.
+              </p>
+            </div>
+
+            <!-- ═══════════════════════════════════════════════════
+                 PUZZLE ZONE — ROOM 4
+                 Wire logic in script.js → setupRoom3Puzzle()
+                 On correct answer, call: completeRoom(3)
+                 ═══════════════════════════════════════════════════ -->
+            <div class="puzzle-zone" id="puzzle-zone-3">
+              <div class="puzzle-placeholder">
+                <div class="placeholder-icon">🔐</div>
+                <p class="placeholder-label">[ PUZZLE MODULE — ST. ANTHONY OF PADUA ]</p>
+                <p class="placeholder-sub">Insert puzzle HTML here. Wire logic in script.js → setupRoom3Puzzle()</p>
+                <button class="btn-dev-unlock" onclick="completeRoom(3)">DEV: UNLOCK ROOM</button>
+              </div>
+            </div>
+            <!-- END PUZZLE ZONE — ROOM 4 -->
+
+          </div>
+          <div class="room-feedback" id="feedback-3"></div>
+          <div class="lock-overlay" id="lock-overlay-3">
+            <div class="lock-overlay-inner">
+              <span class="lock-icon">🔒</span>
+              <p>FILE ENCRYPTED</p>
+              <p class="lock-sub">Complete St. Francis's file to decrypt</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- ─── ROOM 5: POPE PIUS X ────────────────────────────── -->
+        <section class="room locked" id="room-4" data-room="4">
+          <div class="room-header">
+            <span class="room-tag">FILE_005</span>
+            <h2 class="room-title" id="room-title-4">Pope Pius X</h2>
+            <span class="room-status-badge" id="badge-4">LOCKED</span>
+          </div>
+          <div class="room-body">
+            <div class="file-meta">
+              <span>PONTIFF · 1835–1914 AD · RIESE</span>
+              <span class="file-integrity" id="integrity-4">INTEGRITY: 0%</span>
+            </div>
+            <div class="dossier-text" id="dossier-text-4">
+              <p>
+                Giuseppe Melchiorre Sarto, the "Pope of the Eucharist," modernized Church
+                law and championed frequent communion. His archive is protected by liturgical
+                sequences buried within the Motu Proprio documents.
+              </p>
+            </div>
+
+            <!-- ═══════════════════════════════════════════════════
+                 PUZZLE ZONE — ROOM 5
+                 Wire logic in script.js → setupRoom4Puzzle()
+                 On correct answer, call: completeRoom(4)
+                 ═══════════════════════════════════════════════════ -->
+            <div class="puzzle-zone" id="puzzle-zone-4">
+              <div class="puzzle-placeholder">
+                <div class="placeholder-icon">🔐</div>
+                <p class="placeholder-label">[ PUZZLE MODULE — POPE PIUS X ]</p>
+                <p class="placeholder-sub">Insert puzzle HTML here. Wire logic in script.js → setupRoom4Puzzle()</p>
+                <button class="btn-dev-unlock" onclick="completeRoom(4)">DEV: UNLOCK ROOM</button>
+              </div>
+            </div>
+            <!-- END PUZZLE ZONE — ROOM 5 -->
+
+          </div>
+          <div class="room-feedback" id="feedback-4"></div>
+          <div class="lock-overlay" id="lock-overlay-4">
+            <div class="lock-overlay-inner">
+              <span class="lock-icon">🔒</span>
+              <p>FILE ENCRYPTED</p>
+              <p class="lock-sub">Complete St. Anthony's file to decrypt</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- ─── ROOM 6: SAINT MAXIMILIAN KOLBE ────────────────── -->
+        <section class="room locked" id="room-5" data-room="5">
+          <div class="room-header">
+            <span class="room-tag">FILE_006</span>
+            <h2 class="room-title" id="room-title-5">St. Maximilian Kolbe</h2>
+            <span class="room-status-badge" id="badge-5">LOCKED</span>
+          </div>
+          <div class="room-body">
+            <div class="file-meta">
+              <span>FRANCISCAN MARTYR · 1894–1941 AD · ZDUŃSKA WOLA</span>
+              <span class="file-integrity" id="integrity-5">INTEGRITY: 0%</span>
+            </div>
+            <div class="dossier-text" id="dossier-text-5">
+              <p>
+                Rajmund Kolbe, the "Martyr of Charity," sacrificed his life for a fellow prisoner
+                at Auschwitz. The final saint file before the Ignatian Vault — its key is encoded
+                in the language of total self-gift.
+              </p>
+            </div>
+
+            <!-- ═══════════════════════════════════════════════════
+                 PUZZLE ZONE — ROOM 6
+                 Wire logic in script.js → setupRoom5Puzzle()
+                 On correct answer, call: completeRoom(5)
+                 ═══════════════════════════════════════════════════ -->
+            <div class="puzzle-zone" id="puzzle-zone-5">
+              <div class="puzzle-placeholder">
+                <div class="placeholder-icon">🔐</div>
+                <p class="placeholder-label">[ PUZZLE MODULE — ST. MAXIMILIAN KOLBE ]</p>
+                <p class="placeholder-sub">Insert puzzle HTML here. Wire logic in script.js → setupRoom5Puzzle()</p>
+                <button class="btn-dev-unlock" onclick="completeRoom(5)">DEV: UNLOCK ROOM</button>
+              </div>
+            </div>
+            <!-- END PUZZLE ZONE — ROOM 6 -->
+
+          </div>
+          <div class="room-feedback" id="feedback-5"></div>
+          <div class="lock-overlay" id="lock-overlay-5">
+            <div class="lock-overlay-inner">
+              <span class="lock-icon">🔒</span>
+              <p>FILE ENCRYPTED</p>
+              <p class="lock-sub">Complete Pope Pius X's file to decrypt</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- ─── ROOM 7: FINAL VAULT — ST. IGNATIUS OF LOYOLA ──── -->
+        <section class="room locked vault" id="room-6" data-room="6">
+          <div class="room-header">
+            <span class="room-tag">VAULT_IGNATIAN</span>
+            <h2 class="room-title" id="room-title-6">The Ignatian Vault</h2>
+            <span class="room-status-badge vault-badge" id="badge-6">SEALED</span>
+          </div>
+          <div class="room-body">
+            <div class="file-meta">
+              <span>ST. IGNATIUS OF LOYOLA · FOUNDER · 1491–1556 AD · LOYOLA</span>
+              <span class="file-integrity" id="integrity-6">INTEGRITY: 0%</span>
+            </div>
+            <div class="dossier-text" id="dossier-text-6">
+              <p>
+                Íñigo López de Loyola, founder of the Society of Jesus, composed the
+                <em>Spiritual Exercises</em> — a system of prayer and discernment that shaped
+                the modern Church. This vault contains the master decryption key for the entire
+                archive. All six saint files must be restored before entry is permitted.
+              </p>
+            </div>
+
+            <!-- ═══════════════════════════════════════════════════
+                 PUZZLE ZONE — FINAL VAULT
+                 This is the final challenge, unlocked only after all 6 rooms complete.
+                 Wire logic in script.js → setupRoom6Puzzle()
+                 On correct answer, call: completeRoom(6) → triggers victory screen
+                 ═══════════════════════════════════════════════════ -->
+            <div class="puzzle-zone vault-puzzle" id="puzzle-zone-6">
+              <div class="puzzle-placeholder">
+                <div class="placeholder-icon">🏛️</div>
+                <p class="placeholder-label">[ FINAL VAULT PUZZLE — ST. IGNATIUS OF LOYOLA ]</p>
+                <p class="placeholder-sub">The master puzzle. Wire logic in script.js → setupRoom6Puzzle()</p>
+                <button class="btn-dev-unlock vault-unlock" onclick="completeRoom(6)">DEV: COMPLETE MISSION</button>
+              </div>
+            </div>
+            <!-- END PUZZLE ZONE — FINAL VAULT -->
+
+          </div>
+          <div class="room-feedback" id="feedback-6"></div>
+          <div class="lock-overlay vault-lock" id="lock-overlay-6">
+            <div class="lock-overlay-inner">
+              <span class="lock-icon">⛪</span>
+              <p>IGNATIAN VAULT SEALED</p>
+              <p class="lock-sub">Restore all 6 saint files to unseal the vault</p>
+              <!-- Mini status of all 6 saint files shown inside vault lock -->
+              <div class="vault-prereqs" id="vault-prereqs"></div>
+            </div>
+          </div>
+        </section>
+
+      </main>
+    </div><!-- end .game-layout -->
+  </div><!-- end #game-screen -->
+
+  <!-- ═══════════════════════════════════════════════════════════
+       HINT MODAL
+       ═══════════════════════════════════════════════════════════ -->
+  <div id="hint-modal" class="modal" role="dialog" aria-modal="true" aria-label="Hint">
+    <div class="modal-box">
+      <div class="modal-header">
+        <span class="modal-icon">💡</span>
+        <h3>${t('classifiedIntel')}</h3>
+      </div>
+      <p id="hint-text" class="modal-body">Hint text loads here.</p>
+      <button class="btn-primary" onclick="closeHint()">${t('acknowledge')}</button>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       VICTORY SCREEN — Archive Restored
+       ═══════════════════════════════════════════════════════════ -->
+  <div id="victory-screen" class="screen end-screen victory">
+    <div class="victory-scanlines" aria-hidden="true"></div>
+    <div class="end-content victory-content">
+
+      <!-- Animated seal -->
+      <div class="victory-seal-wrap" aria-hidden="true">
+        <div class="victory-seal">
+          <span class="victory-seal-cross">✟</span>
+          <span class="victory-ring victory-ring-1"></span>
+          <span class="victory-ring victory-ring-2"></span>
+          <span class="victory-ring victory-ring-3"></span>
+        </div>
+      </div>
+
+      <p class="end-label victory-label">MISSION ACCOMPLISHED · ARCHIVE RESTORED</p>
+      <h2 class="end-title victory-title">THE IGNATIAN VAULT<br>IS OPEN</h2>
+
+      <!-- Clue words row -->
+      <div class="victory-clues" aria-label="Recovered clue words">
+        <p class="victory-clues-label">RECOVERED CIPHER</p>
+        <div class="victory-clue-row">
+          <span class="victory-clue-word">KEY</span>
+          <span class="victory-clue-sep">·</span>
+          <span class="victory-clue-word">LIGHT</span>
+          <span class="victory-clue-sep">·</span>
+          <span class="victory-clue-word">POVERTY</span>
+          <span class="victory-clue-sep">·</span>
+          <span class="victory-clue-word">TRUTH</span>
+          <span class="victory-clue-sep">·</span>
+          <span class="victory-clue-word">EUCHARIST</span>
+          <span class="victory-clue-sep">·</span>
+          <span class="victory-clue-word">SACRIFICE</span>
+        </div>
+      </div>
+
+      <!-- Final message -->
+      <div class="victory-message">
+        <p class="victory-message-text">
+          The saints you have encountered today did not live their faith quietly.
+          Peter led. Bernard reformed. Francis gave everything away.
+          Anthony taught. Pius X opened the sacraments to all.
+          Kolbe laid down his life.
+        </p>
+        <p class="victory-message-text">
+          And Ignatius of Loyola gathered all of it into a single conviction:
+          <em>faith is not a feeling — it is a decision, made daily,
+          to act with courage, wisdom, and love in the world as it actually is.</em>
+        </p>
+        <p class="victory-message-quote">
+          "Go forth and set the world on fire."
+          <span class="victory-quote-attr">— St. Ignatius of Loyola</span>
+        </p>
+      </div>
+
+      <!-- Stats -->
+      <div class="end-stats victory-stats" id="victory-stats"></div>
+
+      <button class="btn-primary victory-btn" onclick="resetGame()">↩ RETURN TO START</button>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       FAILURE SCREEN — shown when timer reaches 00:00
+       ═══════════════════════════════════════════════════════════ -->
+  <div id="failure-screen" class="screen end-screen failure">
+    <div class="end-content">
+      <div class="end-crest failure-crest">⚠</div>
+      <p class="end-label">MISSION FAILED</p>
+      <h2 class="end-title">SYSTEM PURGE COMPLETE</h2>
+      <p class="end-body">
+        Time expired. The Vatican Archives have been permanently encrypted.
+        The Ignatian Vault remains sealed. The records are lost.
+      </p>
+      <div class="end-stats" id="failure-stats">
+        <!-- Rooms completed injected by JS -->
+      </div>
+      <button class="btn-primary" onclick="resetGame()">RETRY MISSION</button>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
